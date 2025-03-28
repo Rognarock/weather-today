@@ -3,7 +3,11 @@ module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      transitionProperty: {
+        bg: "background-image, background-color",
+      },
+    },
   },
   plugins: [],
 };

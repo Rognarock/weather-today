@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "light"
+  );
 
   useEffect(() => {
     const root = window.document.documentElement;
-    if (isDark) {
+    if (theme === "dark") {
       root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
     } else {
       root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
     }
-  }, [isDark]);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   return (
     <button
-      onClick={() => setIsDark(!isDark)}
-      className="absolute top-4 right-4 bg-gray-300 dark:bg-gray-700 text-sm px-3 py-1 rounded shadow transition-all duration-300"
+      onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+      className="text-sm px-2 py-1 rounded bg-gray-200 dark:bg-gray-700"
     >
-      {isDark ? "☀️ Light" : "🌙 Dark"}
+      {theme === "dark" ? "🌙 Dark" : "🔆 Light"}
     </button>
   );
 };
