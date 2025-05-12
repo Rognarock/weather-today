@@ -1,16 +1,15 @@
-import FavoriteButton from './FavoriteButton';
-
-function WeatherCard({ city, temp, description, onAddFavorite }) {
+export default function WeatherCard({ city, temp, description, onAddFavorite }) {
   return (
-    <div className="max-w-sm mx-auto mt-8 p-6 bg-white rounded shadow-md">
+    <div className="max-w-md mx-auto mt-10 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center">
       <h2 className="text-2xl font-bold mb-2">{city}</h2>
-      <p className="text-3xl mb-2">{temp}°C</p>
-      <p className="text-gray-600 capitalize">{description}</p>
-      
-      {/* Favorite Button */}
-      <FavoriteButton onClick={onAddFavorite} />
+      <p className="text-lg">{description}</p>
+      <p className="text-4xl font-semibold my-4">{temp}°C</p>
+      <button
+        onClick={onAddFavorite}
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+      >
+        Add to Favorites
+      </button>
     </div>
   );
 }
-
-export default WeatherCard;

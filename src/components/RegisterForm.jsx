@@ -1,61 +1,48 @@
-import { useState } from 'react';
-import { auth } from '../services/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebase";
+import { toast } from "react-toastify";
 
-function RegisterForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+export default function RegisterForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setError('');
-
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return;
-    }
-
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/favorites'); // Redirect after successful registration
+      toast.success("Registered successfully!");
     } catch (err) {
-      console.error(err);
-      setError(err.message);
+      toast.error("Registration failed.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow-md space-y-4">
-      <h2 className="text-2xl font-bold text-center">Register</h2>
-
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
+    <form
+      onSubmit={handleRegister}
+      className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-80 space-y-4"
+    >
       <input
         type="email"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        className="w-full p-2 border rounded"
-        required
+        className="w-full p-3 rounded border dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400"
       />
-
       <input
         type="password"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password (min 6 chars)"
-        className="w-full p-2 border rounded"
-        required
+        className="w-full p-3 rounded border dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400"
       />
-
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+      <button
+        type="submit"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded"
+      >
         Register
       </button>
     </form>
   );
 }
 
-export default RegisterForm;

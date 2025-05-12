@@ -1,8 +1,11 @@
+// src/pages/Home.jsx
+
 import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import WeatherCard from '../components/WeatherCard';
 import { auth } from '../services/firebase';
-import { addFavoriteCity } from '../services/favoritesService'; // new import
+import { addFavoriteCity } from '../services/favoritesService';
+import { toast } from 'react-toastify';
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
@@ -19,6 +22,7 @@ function Home() {
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
       );
       const data = await response.json();
+
       if (data.cod === 200) {
         setWeather({
           city: data.name,
@@ -31,30 +35,29 @@ function Home() {
       }
     } catch (error) {
       console.error(error);
-      setError('An error occurred. Please try again.');
       setWeather(null);
+      setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  
   const handleAddFavorite = async () => {
     if (weather) {
       const user = auth.currentUser;
       if (user) {
         try {
           await addFavoriteCity(user.uid, weather.city);
-          alert(`${weather.city} added to favorites!`);
+          toast.success(`${weather.city} added to favorites!`);
         } catch (error) {
           console.error('Error adding favorite:', error);
+          toast.error('Failed to add city to favorites.');
         }
       } else {
-        alert('You must be logged in to add favorites.');
+        toast.warn('You must be logged in to add favorites.');
       }
     }
   };
-  
 
   return (
     <div className="text-center mt-10">
@@ -82,3 +85,4 @@ function Home() {
 }
 
 export default Home;
+

@@ -5,10 +5,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Favorites from './pages/Favorites';
 import PrivateRoute from './components/PrivateRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -23,6 +25,7 @@ function App() {
           }
         />
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }

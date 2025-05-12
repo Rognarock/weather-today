@@ -1,56 +1,47 @@
-import { useState } from 'react';
-import { auth } from '../services/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebase";
+import { toast } from "react-toastify";
 
-function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/favorites'); // Redirect after successful login
+      toast.success("Successfully logged in!");
     } catch (err) {
-      console.error(err);
-      setError('Invalid email or password');
+      toast.error("Login failed. Check credentials.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow-md space-y-4">
-      <h2 className="text-2xl font-bold text-center">Login</h2>
-
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
+    <form
+      onSubmit={handleLogin}
+      className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-80 space-y-4"
+    >
       <input
         type="email"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        className="w-full p-2 border rounded"
-        required
+        className="w-full p-3 rounded border dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400"
       />
-
       <input
         type="password"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        className="w-full p-2 border rounded"
-        required
+        className="w-full p-3 rounded border dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400"
       />
-
-      <button type="submit" className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
+      <button
+        type="submit"
+        className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded"
+      >
         Login
       </button>
     </form>
   );
 }
-
-export default LoginForm;
